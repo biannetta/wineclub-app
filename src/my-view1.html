@@ -9,6 +9,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="my-view1">
@@ -21,7 +24,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    <div class="card">
+    <firebase-auth id="auth" user="{{user}}" provider="google" on-error="handleError"></firebase-auth>
+
+    <firebase-query
+      id="query"
+      path="/admins/[[user.uid]]"
+      data="{{admins}}">
+    </firebase-query>
+
+    <div class="card" hidden$="[[!user]]">
       <div class="circle">1</div>
       <h1>View One</h1>
       <p>Ut labores minimum atomorum pro. Laudem tibique ut has.

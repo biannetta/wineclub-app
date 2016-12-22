@@ -1,0 +1,84 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/star-rating/star-rating.html">
+
+<dom-module id="wine-details">
+  <template>
+    <style>
+      :host {
+        --app-primary-color: #607d8b;
+        --app-secondary-color: black;
+        display: block;
+      }
+
+      app-header {
+        --app-header-background-rear-layer: {
+          background-color: var(--app-primary-color);
+        }
+        color: #fff;
+      }
+
+      .content {
+        align-items: center;
+        display: flex;
+        height: 100vh;
+        justify-content: center;
+      }
+
+      paper-card {
+        width: 100%;
+      }
+
+      paper-icon-button {
+        color: white;
+      }
+    </style>
+
+    <firebase-document
+      path="/wines/[[wine]]"
+      data="{{wineData}}">
+    </firebase-document>
+
+    <app-header-layout>
+      <app-header effects="waterfall fade-background" reveals>
+        <app-toolbar>
+          <a href="#/list" tabindex="-1">
+            <paper-icon-button icon="icons:arrow-back"></paper-icon-button>
+          </a>
+        </app-toolbar>
+      </app-header>
+
+      <div class="content">
+        <paper-card heading="[[wineData.name]]">
+          <div class="card-content">
+            <p>[[wineData.type]]</p>
+          </div>
+          <div class="card-actions">
+            <star-rating rate="4"></star-rating>
+          </div>
+        </paper-card>
+      </div>
+    </app-header-layout>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'wine-details',
+      properties: {
+        wine: {
+          type: 'string',
+          observer: '_wineChanged'
+        }
+      },
+      _wineChanged: function(wine) {
+        this.style.background = 'url(https://placehold.it/500x500)';
+      }
+    });
+  </script>
+</dom-module>

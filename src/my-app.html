@@ -20,6 +20,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-app.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="my-login.html">
 <link rel="import" href="my-icons.html">
 
 <dom-module id="my-app">
@@ -61,7 +64,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         font-weight: bold;
       }
+
+      .avatar {
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        vertical-align: middle;
+        margin-left: 16px;
+      }
     </style>
+
+    <firebase-app
+      auth-domain="wineapp-1f5fc.firebaseapp.com"
+      database-url="https://wineapp-1f5fc.firebaseio.com"
+      api-key="AIzaSyDy-nFZheTQ7JxfyvXpJFb_Z4XtLIsl5Z0">
+    </firebase-app>
+
+    <firebase-auth id="auth" user="{{user}}" provider="google" on-error="handleError"></firebase-auth>
 
     <app-location route="{{route}}"></app-location>
     <app-route
@@ -76,8 +95,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-toolbar>Menu</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <a name="view1" href="/view1">View One</a>
-          <a name="view2" href="/view2">View Two</a>
-          <a name="view3" href="/view3">View Three</a>
         </iron-selector>
       </app-drawer>
 
@@ -87,9 +104,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-header condenses reveals effects="waterfall">
           <app-toolbar>
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
-            <div main-title>My App</div>
+            <div main-title>Wine Club Rankings</div>
+            <img class="avatar" src="[[user.photoURL]]" hidden$="[[!user]]">
           </app-toolbar>
         </app-header>
+
+        <my-login user="[[user]]"></my-login>
 
         <iron-pages
             selected="[[page]]"
@@ -97,8 +117,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             fallback-selection="view404"
             role="main">
           <my-view1 name="view1"></my-view1>
-          <my-view2 name="view2"></my-view2>
-          <my-view3 name="view3"></my-view3>
           <my-view404 name="view404"></my-view404>
         </iron-pages>
       </app-header-layout>

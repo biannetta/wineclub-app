@@ -1,0 +1,82 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-app.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-query.html">
+
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+
+<link rel="import" href="wine-list.html">
+<link rel="import" href="wine-details.html">
+<link rel="import" href="login-splash.html">
+
+<link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
+
+<dom-module id="wine-app">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <firebase-app
+      auth-domain="wineapp-1f5fc.firebaseapp.com"
+      database-url="https://wineapp-1f5fc.firebaseio.com"
+      api-key="AIzaSyDy-nFZheTQ7JxfyvXpJFb_Z4XtLIsl5Z0"></firebase-app>
+
+    <firebase-auth id="fireAuth" user="{{user}}"></firebase-auth>
+
+    <app-location route="{{route}}" use-hash-as-path></app-location>
+    <app-route
+      route="{{route}}"
+      pattern="/:page"
+      data="{{pageData}}"
+      tail="{{tailData}}"></app-route>
+    <app-route
+      route="{{tailData}}"
+      pattern="/:id"
+      data="{{detailData}}"></app-route>
+
+    <firebase-query
+      id="query"
+      path="/wines"
+      data="{{wines}}"></firebase-query>
+
+    <div id="main">
+      <iron-pages selected="[[pageData.page]]" attr-for-selected="name" fallback-selection="list">
+        <wine-list name="list" wines="[[wines]]"></wine-list>
+        <wine-details name="detail" wine="[[detailData.id]]"></wine-details>
+        <login-splash name="login"></login-splash>
+      </iron-pages>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'wine-app',
+      listeners: {
+        'redirect': '_redirectPage'
+      },
+      ready: function() {
+        this.$.fireAuth.auth.onAuthStateChanged(function(user){
+          if(user) {
+            this.set('route.path', '/list');
+          } else {
+            this.set('route.path', '/login');
+          }
+        }.bind(this));
+      },
+      attached: function() {
+        if (!this.route.path) {
+          this.set('route.path', '/list');
+        }
+      },
+      _redirectPage: function(page) {
+          this.set('route.path', '/' + page.detail);
+      }
+    });
+  </script>
+</dom-module>

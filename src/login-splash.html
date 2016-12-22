@@ -1,0 +1,59 @@
+<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+
+<dom-module id="login-splash">
+  <template>
+    <style>
+      :host {
+        display: block;
+        font-family: 'Lobster', cursive;
+      }
+
+      h1 {
+        color: whitesmoke;
+        text-shadow:#4f6478 0 1px 5px;
+      }
+
+      .splash {
+        align-items: center;
+        background: linear-gradient(#607d8b, #90a9b5);
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        justify-content: center;
+      }
+
+      paper-button {
+        background-color: #90a9b5;
+        color: whitesmoke;
+      }
+    </style>
+
+    <firebase-auth id="auth" user="{{user}}" provider="google" on-error="handleError"></firebase-auth>
+
+    <div class="splash">
+      <h1>Winegram</h1>
+      <paper-button raised on-tap="login">Sign In</paper-button>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'login-splash',
+      properties: {
+        user: {
+          type: Object
+        }
+      },
+      login: function() {
+        this.$.auth.signInWithPopup()
+          .then(function(response) {
+            return response;
+          }.bind(this))
+          .catch(function (error) {
+            console.log(error);
+          });
+      },
+    });
+  </script>
+</dom-module>

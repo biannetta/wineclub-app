@@ -1,0 +1,117 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
+
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+
+
+<dom-module id="wine-list">
+  <template>
+    <style>
+      :host {
+        --app-primary-color: #607d8b;
+        --app-secondary-color: #90a9b5;
+        display: block;
+      }
+
+      app-header {
+        background: var(--app-primary-color);
+      }
+
+      app-toolbar {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      paper-card {
+        display: block;
+      }
+
+      paper-icon-button {
+        color: whitesmoke;
+      }
+
+      [main-title] {
+        color: #fff;
+        font-family: 'Lobster', cursive;
+        font-size: 24px;
+        text-shadow:#4f6478 0 1px 5px;
+      }
+
+      .avatar {
+        border-radius: 50%;
+        height: 36px;
+        width: 36px;
+      }
+
+      .card-container {
+        color: black;
+        text-decoration: none;
+        width: 100%;
+      }
+
+    </style>
+
+    <firebase-auth user="{{user}}"></firebase-auth>
+
+    <app-header-layout>
+      <app-header condenses fixed shadow effects="waterfall">
+        <app-toolbar>
+
+          <div main-title>Wineagram</div>
+
+          <paper-menu-button horizontal-align="right">
+            <paper-icon-button icon="more-vert" class="dropdown-trigger" alt="menu"></paper-icon-button>
+            <paper-menu class="dropdown-content" alt="menu">
+              <paper-item>
+                <span>
+                  [[user.displayName]]
+                  <img class="avatar" src="[[user.photoURL]]" hidden$="[[!user]]">
+                </span>
+              </paper-item>
+              <paper-item on-tap="logout">
+                Logout
+              </paper-item>
+            </paper-menu>
+          </paper-menu-button>
+        </app-toolbar>
+      </app-header>
+
+      <div class="content">
+        <template is="dom-repeat" items="[[wines]]">
+          <a href="#/detail/[[index]]" class="card-container">
+            <paper-card image="https://placehold.it/350x250">
+              <div class="card-content">
+                <h2>[[item.name]]</h2>
+                <p>[[item.type]]</p>
+              </div>
+            </paper-card>
+          </a>
+        </template>
+      </div>
+    </app-header-layout>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'wine-list',
+      properties: {
+        wines: Object
+      },
+      logout: function() {
+        firebase.auth().signOut();
+      }
+    });
+  </script>
+</dom-module>
