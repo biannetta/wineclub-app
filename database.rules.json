@@ -1,0 +1,6 @@
+{
+  "rules": {
+    ".read": "true",
+    ".write": "data.child('admins').child(auth.uid).val() === true"
+  }
+}

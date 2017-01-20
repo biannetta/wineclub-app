@@ -10,13 +10,13 @@
       }
 
       h1 {
-        color: whitesmoke;
-        text-shadow:#4f6478 0 1px 5px;
+        color: #ECE4D8;
+        text-shadow:#7F7B75 0 1px 1px;
       }
 
       .splash {
         align-items: center;
-        background: linear-gradient(#607d8b, #90a9b5);
+        background: linear-gradient(#993D60, #7C334F);
         display: flex;
         flex-direction: column;
         height: 100vh;
@@ -24,8 +24,8 @@
       }
 
       paper-button {
-        background-color: #90a9b5;
-        color: whitesmoke;
+        background-color: #993D60;
+        color: #ECE4D8;
       }
     </style>
 
@@ -46,14 +46,11 @@
         }
       },
       login: function() {
-        this.$.auth.signInWithPopup()
-          .then(function(response) {
-            return response;
-          }.bind(this))
-          .catch(function (error) {
-            console.log(error);
-          });
+        this.$.auth.signInWithPopup();
       },
+      handleError: function(err) {
+        console.log(err);
+      }
     });
   </script>
 </dom-module>

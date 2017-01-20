@@ -49,7 +49,7 @@
       <iron-pages selected="[[pageData.page]]" attr-for-selected="name" fallback-selection="list">
         <wine-list name="list" wines="[[wines]]"></wine-list>
         <wine-details name="detail" wine="[[detailData.id]]"></wine-details>
-        <login-splash name="login"></login-splash>
+        <login-splash name="login" user="{{user}}"></login-splash>
       </iron-pages>
     </div>
   </template>
@@ -71,7 +71,7 @@
       },
       attached: function() {
         if (!this.route.path) {
-          this.set('route.path', '/list');
+          this.set('route.path', '/login');
         }
       },
       _redirectPage: function(page) {
